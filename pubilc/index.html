@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{arr[0].a}}</p>
+        <p>{{arr[0].b}}</p>
+
+    </div>
+    <script src="../dist/umd/vue.js"></script>
+    <script>
+        // var vm=new Vue({
+        //     el:'#app',
+        //     data:{
+        //         name:'张三',
+        //         age:18,
+        //         sex:'女',
+        //         son:{
+        //             name:'儿子',
+        //             age:5,
+        //             sex:'男'
+        //         },
+        //         grandson:'孙子'
+        //     }
+        // })
+        // vm._data.age=19
+        // vm._data.son.name='不是儿子'
+        // console.log(vm._data.son.name)
+        // vm._data.grandson = {
+        //     a:'实时',
+        //     b:45645644
+        // }
+        // vm._data.grandson.a='离线'
+        // console.log(vm._data.grandson.a)
+        // vm.b='哈哈'   // 原来data上所定义的属性都能被监测劫持到，后来往data上添加的属性不能被监测到因为在initData初始化数据的时候没有
+        // vm.b='lalal'
+
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                name:'张三',
+                arr:[{a:1,b:2}]
+            }
+        })
+       
+
+        // vm._data.arr.push({name:'hshsh'})
+
+        
+    </script>
+</body>
+</html>
