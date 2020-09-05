@@ -1,7 +1,8 @@
 import {initState} from './state'
-
 import { compileToFunction } from './compiler/index.js'
-import { observe } from './observe'
+import {mountComponent,callHook} from './lifecycle.js'
+import {mergeOptions} from './utils/index'
+
 
 
 // 向vue原型上添加init方法
@@ -11,13 +12,16 @@ export function initMixin(Vue){
         console.log('init---options(用户传入的数据)',options)
         // 数据劫持
         const vm=this   // 当前实例
-        vm.$options=options   // vue中使用 this.$options 指代的就是用户new Vue是传递进来的数据
-         
 
+        // 将用户传递的options和全局的options合并到自己身上
+        vm.$options=mergeOptions(vm.constructor.options,options)   // vue中使用 this.$options 指代的就是用户new Vue是传递进来的数据
+         
+        callHook(vm,'beforeCreate')
 
         // 初始状态 把当前实例传递进入 供initState使用
         initState(vm)
 
+        callHook(vm,'created')
 
         // 如果用户传了el属性 需要将页面渲染出来 实现挂在流程
         if(vm.$options.el){
@@ -46,6 +50,9 @@ export function initMixin(Vue){
             options.render = render
 
         }
+
+        // 渲染当前的组件  挂在这个组件
+        mountComponent(vm,el)
 
     }
  

@@ -2,6 +2,9 @@
 
 
 import {initMixin} from './init'
+import {renderMixin} from './render'
+import {lifecycleMixin} from './lifecycle'
+import {initGlobalAPI} from './initGlobalAPI/index'
 function Vue(options){
     // 进行vue初始化工作
     this._init(options)
@@ -14,5 +17,7 @@ function Vue(options){
 
 // 通过引入文件的方法 向Vue原型上添加方法
 initMixin(Vue)
-
+renderMixin(Vue)
+lifecycleMixin(Vue)
+initGlobalAPI(Vue)
 export default Vue

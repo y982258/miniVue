@@ -2,6 +2,7 @@
 // Object.defineProperty 不能兼容ie8及以下
 import { isObject,def } from '../utils/index'
 import {arrayMethods} from './array.js'
+import Dep from './dep'
 
 class observer {
     constructor(value) {
@@ -58,11 +59,17 @@ class observer {
 
 
 function defineReactive(data,key,value){
+
+    let dep = new Dep();
+
     console.log('使用df重新定义--data',data,'key--',key,'value--',value)
     observe(value)   // 如何对象的属性值还是一个对象的话继续劫持  递归实现深度监测
     Object.defineProperty(data,key,{
         
         get(){  // 获取值的时候做一些操作
+            if(Dep.target){   // 如果当前有watcher
+                dep.depend() // 意味着我要将watcher存起来
+            }
             return value
         },
         set(newValue){  // 设置值的时候也可以做一些操作
@@ -82,6 +89,7 @@ function defineReactive(data,key,value){
             // 所以如果设置的是还是一个对象的话 我们需要继续劫持 
             observe(newValue)      // 继续劫持用户设置的值
             value = newValue
+            dep.notify()   // 通知依赖的watcher来进行更新操作
         }
     })
 }
