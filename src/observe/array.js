@@ -48,6 +48,7 @@ methods.forEach(method=>{
         let ob=this.__ob__
         if(inserted) ob.observerArray(inserted)
 
+        ob.dep.notify()  // 如果用户调用了这些方法 通知数组的dep进行更新操作
 
         return result
 

@@ -6,6 +6,11 @@ import Dep from './dep'
 
 class observer {
     constructor(value) {
+
+        this.dep = new Dep()  // 专门给数组使用
+
+
+
         // 遍历对象 重新定义data
         // vue如果数据的层次过多 需要递归的去解析对象中的属性，一次添加set和get方法 消耗性能
 
@@ -63,12 +68,19 @@ function defineReactive(data,key,value){
     let dep = new Dep();
 
     console.log('使用df重新定义--data',data,'key--',key,'value--',value)
-    observe(value)   // 如何对象的属性值还是一个对象的话继续劫持  递归实现深度监测
+    let chuildOb=observe(value)   // 如何对象的属性值还是一个对象的话继续劫持  递归实现深度监测
+    
     Object.defineProperty(data,key,{
         
         get(){  // 获取值的时候做一些操作
             if(Dep.target){   // 如果当前有watcher
                 dep.depend() // 意味着我要将watcher存起来
+                if(chuildOb){
+                    chuildOb.dep.depend() // 收集了数组相关依赖
+                    if(Array.isArray(value)){
+                        dependArray(value)
+                    }
+                }
             }
             return value
         },
@@ -94,6 +106,17 @@ function defineReactive(data,key,value){
     })
 }
 
+function dependArray(value){
+    for(let i=0;i<value.length;i++) {
+        let current = value[i]
+        // current代表数组每一项的值，如果他有__ob__属性他就是一个对象类型
+        // 并且被observe观测过，那么就有dep依赖管理器我们就进行依赖收集
+        current.__ob__ && current.__ob__.dep.depend();
+        if(Array.isArray(current)){  // 递归进行依赖收集
+            dependArray(current)
+        }
+    }
+}
 
 export function observe(data) {
     // console.log('observe对象劫持---data', data)
@@ -102,5 +125,5 @@ export function observe(data) {
         // console.error('data is not object');
         return
     }
-    new observer(data)  // 用来观测数据
+    return new observer(data)  // 用来观测数据
 }

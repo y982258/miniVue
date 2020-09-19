@@ -8,6 +8,8 @@
 <body>
     <div id="app" class="active" style="color:red;" name="hhh">
         <p>hello{{name}}</p>
+        <p>{{age}}</p>
+        <p>{{arr}}</p>
     </div>
 
     XXXXX
@@ -43,7 +45,8 @@
             el:'#app',
             data:{
                 name:'张三',
-                age:18
+                age:18,
+                arr:[1,[11]]
             },
             // beforeCreate() {
             //     console.log('beforeCreate',this.name)
@@ -54,10 +57,28 @@
             // beforeMount() {
             //     console.log('beforeMount',this.$el)
             // },
-            // mounted() {
-            //     console.log('mounted',this.$el)
-            // },
+            mounted() {
+                // console.log('mounted',this.$el)
+                // setTimeout(()=>{
+                //     this.age = 1000
+                //     this.age = 2000 
+                //     this.age = 3000
+                //     this.age = 4000
+                    // this.arr.push(2,3,4)
+                    // this.arr[1].push(22)
+                // },5000)
+            },
         })
+
+        vm.$nextTick(()=>{
+            console.log(vm.$el.innerHTML)
+        })
+
+        vm.age = 1000
+        vm.age = 2000
+        vm.age = 3000
+
+       
        
 
         // vm._data.arr.push({name:'hshsh'})
